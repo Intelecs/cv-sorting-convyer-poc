@@ -1,3 +1,4 @@
 back_up
 venv
 .vscode
+__pycache__/*
