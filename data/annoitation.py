@@ -1,10 +1,14 @@
 import glob
 import os
+import pickle
 import xml.etree.ElementTree as ET
+from os import listdir, getcwd
 from typing import List
+import tqdm
+import random
 
-data_dir = ""
-base_dir = ""
+data_dir = "datasets/birds-species/images"
+base_dir = "datasets/birds-species"
 classes = os.listdir(data_dir)
 
 
@@ -29,10 +33,11 @@ def convert(size, box):
     h = h*dh
     return (x,y,w,h)
 
-def convert_xml_annotation(dir_path: str, image_path: str):
+def convert_annotation(dir_path: str, image_path: str):
 
     basename = os.path.basename(image_path)
     basename_no_ext = os.path.splitext(basename)[0]
+    
 
     class_name = image_path.split("/")[-2]
 
@@ -62,6 +67,41 @@ def convert_xml_annotation(dir_path: str, image_path: str):
         bb = convert((w,h), b)
         output_file.write(str(cls_id) + " " + " ".join([str(a) for a in bb]) + '\n')
 
+def extract_xml_to_json(xml_file: str):
+    root = ET.parse(xml_file).getroot()
+    
+    # Initialise the info dict 
+    info_dict = {}
+    info_dict['bboxes'] = []
+
+    # Parse the XML Tree
+    for elem in root:
+        # Get the file name 
+        if elem.tag == "filename":
+            info_dict['filename'] = elem.text
+            
+        # Get the image size
+        elif elem.tag == "size":
+            image_size = []
+            for subelem in elem:
+                image_size.append(int(subelem.text))
+            
+            info_dict['image_size'] = tuple(image_size)
+        
+        # Get details of the bounding box 
+        elif elem.tag == "object":
+            bbox = {}
+            for subelem in elem:
+                if subelem.tag == "name":
+                    bbox["class"] = subelem.text
+                    
+                elif subelem.tag == "bndbox":
+                    for subsubelem in subelem:
+                        bbox[subsubelem.tag] = int(subsubelem.text)            
+            info_dict['bboxes'].append(bbox)
+    
+    return info_dict
+
 def create_xml_annotations(dir_path: str, image_path: str):
     class_name = image_path.split("/")[-2]  
     file_name = image_path.split("/")[-1]  
@@ -72,6 +112,8 @@ def create_xml_annotations(dir_path: str, image_path: str):
     class_name = image_path.split("/")[-2]
     if not os.path.exists(dir_path + "/" +  class_name + "/" ):
         os.makedirs(dir_path + "/" +  class_name + "/")
+        
+#     _file = "{}_{}".format(class_name, file_name)
     
     annotation = """<annotation>
             <folder>train</folder>
@@ -84,10 +126,10 @@ def create_xml_annotations(dir_path: str, image_path: str):
             <object>
                 <name>{}</name>
                 <bndbox>
-                    <xmin>21</xmin>
-                    <ymin>20</ymin>
-                    <xmax>213</xmax>
-                    <ymax>213</ymax>
+                    <xmin>11</xmin>
+                    <ymin>10</ymin>
+                    <xmax>203</xmax>
+                    <ymax>203</ymax>
                 </bndbox>
             </object>
     </annotation>""".format(file_name, class_name)
