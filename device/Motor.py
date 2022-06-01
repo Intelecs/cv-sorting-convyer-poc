@@ -8,8 +8,8 @@ except ImportError:
     is_rasperry_pi = False
 
 
-CLASS_I = 11
-CLASS_II = 12
+CLASS_I = 12
+CLASS_II = 13
 
 if is_rasperry_pi:
     class_i_servo = AngularServo(CLASS_I, min_pulse_width=0.0006, max_pulse_width=0.0023)
