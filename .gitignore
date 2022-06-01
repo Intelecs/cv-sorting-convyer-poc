@@ -7,3 +7,4 @@ yolov5/*
 *.onnx
 *.jpeg
 *.sh
+.DS_Store
