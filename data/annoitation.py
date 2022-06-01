@@ -1,14 +1,11 @@
 import glob
 import os
-import pickle
 import xml.etree.ElementTree as ET
-from os import listdir, getcwd
 from typing import List
-import tqdm
-import random
 
-data_dir = "datasets/birds-species/images"
-base_dir = "datasets/birds-species"
+
+data_dir = ""
+base_dir = ""
 classes = os.listdir(data_dir)
 
 
@@ -112,9 +109,6 @@ def create_xml_annotations(dir_path: str, image_path: str):
     class_name = image_path.split("/")[-2]
     if not os.path.exists(dir_path + "/" +  class_name + "/" ):
         os.makedirs(dir_path + "/" +  class_name + "/")
-        
-#     _file = "{}_{}".format(class_name, file_name)
-    
     annotation = """<annotation>
             <folder>train</folder>
             <filename>{}</filename>
