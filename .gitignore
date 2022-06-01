@@ -2,3 +2,8 @@ back_up
 venv
 .vscode
 __pycache__/*
+*.pt
+yolov5/*
+*.onnx
+*.jpeg
+*.sh

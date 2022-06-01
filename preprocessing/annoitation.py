@@ -4,8 +4,8 @@ import xml.etree.ElementTree as ET
 from typing import List
 
 
-data_dir = ""
-base_dir = ""
+data_dir = "datasets/images"
+base_dir = "datasets"
 classes = os.listdir(data_dir)
 
 
@@ -144,5 +144,5 @@ for image_path in images_paths:
 
 for image_path in images_paths:
     list_file.write(image_path + '\n')
-    convert_annotation(data_dir, output_path, image_path)
+    convert_annotation(data_dir, image_path)
 list_file.close()

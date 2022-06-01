@@ -5,7 +5,7 @@ os.environ['KAGGLE_USERNAME'] = "januarymagori"
 os.environ['KAGGLE_KEY'] = "bc6ce7bdd037b4b7edf3c329d842f4f3"
 
 
-download_cmd = "kaggle datasets download -d gpiosenka/100-bird-species --unzip"
+download_cmd = "kaggle datasets download -d saurabhshahane/mango-varieties-classification --unzip"
 process = subprocess.Popen(download_cmd.split(), stdout=subprocess.PIPE)
 output, error = process.communicate()
 
