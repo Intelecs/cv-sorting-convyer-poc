@@ -26,7 +26,7 @@
 # GPIO.cleanup();
 
 from time import sleep
-import RPi.GPIO as GPIO
+import pigpio 
 
 DIR = 20   # Direction GPIO Pin
 STEP = 21  # Step GPIO Pin
@@ -34,26 +34,22 @@ CW = 1     # Clockwise Rotation
 CCW = 0    # Counterclockwise Rotation
 SPR = 48   # Steps per Revolution (360 / 7.5)
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(DIR, GPIO.OUT)
-GPIO.setup(STEP, GPIO.OUT)
-GPIO.output(DIR, CW)
+#connecting the pigpio daemon
+pi = pigpio.pi()
 
-step_count = SPR
-delay = .0208
+#cycle and frequency
+pi.set_PWM_dutycycle(STEP, 128)
+pi.set_PWM_frequency(STEP, 500)
 
-for x in range(step_count):
-    GPIO.output(STEP, GPIO.HIGH)
-    sleep(delay)
-    GPIO.output(STEP, GPIO.LOW)
-    sleep(delay)
+try:
+    while True:
+        pi.write(DIR, 1) # direction of the motor to clockwise
+        sleep(.1)
 
-sleep(.5)
-GPIO.output(DIR, CCW)
-for x in range(step_count):
-    GPIO.output(STEP, GPIO.HIGH)
-    sleep(delay)
-    GPIO.output(STEP, GPIO.LOW)
-    sleep(delay)
+except KeyboardInterrupt:
+    print("\nCtrl-C pressed. Stopping PIGPIo and exit")
 
-GPIO.cleanup()
+finally:
+    pi.set_PWM_dutycycle(STEP,0) # off Pulse width modulation
+    pi.stop()
+
