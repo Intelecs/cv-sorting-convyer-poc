@@ -2,7 +2,7 @@ import argparse
 import os
 import sys
 from pathlib import Path
-
+import time
 import torch
 import torch.backends.cudnn as cudnn
 
@@ -14,9 +14,9 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 from models.common import DetectMultiBackend
 from utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages, LoadStreams
-from utils.general import (LOGGER, check_file, check_img_size, check_imshow, check_requirements, colorstr, cv2,
-                           increment_path, non_max_suppression, print_args, scale_coords, strip_optimizer, xyxy2xywh)
-from utils.plots import Annotator, colors, save_one_box
+from utils.general import (LOGGER, check_img_size, check_imshow, check_requirements, cv2,
+                         non_max_suppression, print_args, scale_coords, strip_optimizer)
+from utils.plots import Annotator, colors
 from utils.torch_utils import select_device, time_sync
 
 
@@ -26,23 +26,23 @@ def run(
         source=ROOT / 'data/images',  # file/dir/URL/glob, 0 for webcam
         data=ROOT / 'data/coco128.yaml',  # dataset.yaml path
         imgsz=(320, 3200),  # inference size (height, width)
-        conf_thres=0.5,  # confidence threshold
+        conf_thres=0.7,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
         max_det=100,  # maximum detections per image
         device='',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
-        view_img=False,  # show results
-        save_txt=False,  # save results to *.txt
-        save_conf=False,  # save confidences in --save-txt labels
-        save_crop=False,  # save cropped prediction boxes
-        nosave=False,  # do not save images/videos
+        view_img=True,  # show results
+    save_txt=False,  # save results to *.txt
+    save_conf=False,  # save confidences in --save-txt labels
+    save_crop=False,  # save cropped prediction boxes
+    nosave=False,  # do not save images/videos
+          project=ROOT / "runs/detect",  # save results to project/name
+    name="exp",  # save results to project/name
+    exist_ok=False,
         classes=None,  # filter by class: --class 0, or --class 0 2 3
         agnostic_nms=False,  # class-agnostic NMS
         augment=False,  # augmented inference
         visualize=False,  # visualize features
         update=False,  # update all models
-        project=ROOT / 'runs/detect',  # save results to project/name
-        name='exp',  # save results to project/name
-        exist_ok=False,  # existing project/name ok, do not increment
         line_thickness=3,  # bounding box thickness (pixels)
         hide_labels=False,  # hide labels
         hide_conf=False,  # hide confidences
@@ -50,7 +50,6 @@ def run(
         dnn=False,  # use OpenCV DNN for ONNX inference
 ):
     source = str(source)
-    save_img = not nosave and not source.endswith('.txt')  # save inference images
     is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
     is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://'))
     webcam = source.isnumeric() or source.endswith('.txt') or (is_url and not is_file)
@@ -64,19 +63,19 @@ def run(
 
     # Dataloader
     if webcam:
-        view_img = check_imshow()
         cudnn.benchmark = True  # set True to speed up constant image size inference
         dataset = LoadStreams(source, img_size=imgsz, stride=stride, auto=pt)
         bs = len(dataset)  # batch_size
     else:
         dataset = LoadImages(source, img_size=imgsz, stride=stride, auto=pt)
         bs = 1  # batch_size
-    vid_path, vid_writer = [None] * bs, [None] * bs
-
+   
     # Run inference
     model.warmup(imgsz=(1 if pt else bs, 3, *imgsz))  # warmup
     dt, seen = [0.0, 0.0, 0.0], 0
-    for path, im, im0s, vid_cap, s in dataset:
+    
+    predicted_labels = []
+    for path, im, im0s, _, s in dataset:
         t1 = time_sync()
         im = torch.from_numpy(im).to(device)
         im = im.half() if model.fp16 else im.float()  # uint8 to fp16/32
@@ -96,9 +95,7 @@ def run(
         pred = non_max_suppression(pred, conf_thres, iou_thres, classes, agnostic_nms, max_det=max_det)
         dt[2] += time_sync() - t3
 
-        # Second-stage classifier (optional)
-        # pred = utils.general.apply_classifier(pred, classifier_model, im, im0s)
-
+        
         # Process predictions
         for i, det in enumerate(pred):  # per image
             seen += 1
@@ -110,49 +107,57 @@ def run(
 
             p = Path(p)  # to Path
             s += '%gx%g ' % im.shape[2:]  # print string
+
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
-            imc = im0.copy() if save_crop else im0  # for save_crop
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
+            
             if len(det):
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(im.shape[2:], det[:, :4], im0.shape).round()
 
                 # Print results
                 for c in det[:, -1].unique():
-                    n = (det[:, -1] == c).sum()  # detections per class
-                    s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
+                    n = (det[:, -1] == c).sum() 
+                    s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
-                    if save_txt:  # Write to file
-                        xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
-                        line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
-                        
+                    
+                    predicted_labels.append(
+                        {
+                            "label": names[int(cls)],
+                            "confidence": f"{conf:.2f}",
+                            "inference_speed": f"{t3 - t2:.3f}",
+                            "timestamp": int(time.time())
+                        }
+                    )
 
-                    if save_img or save_crop or view_img:  # Add bbox to image
-                        c = int(cls)  # integer class
-                        label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
-                        annotator.box_label(xyxy, label, color=colors(c, True))
-                    if save_crop:
-                        pass
+                    if names[int(cls)] == 'CLASS A':
+                        LOGGER.info(f"Opening Servo")
+                    
+                    if names[int(cls)] == 'CLASS B':
+                        LOGGER.info(f"Closing Servo")
+                    
+                    if names[int(cls)] == 'CLASS C':
+                        LOGGER.info(f"Opening Door")
 
+                    c = int(cls)  # integer class
+                    label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
+                    annotator.box_label(xyxy, label, color=colors(c, True))
+    
             # Stream results
             im0 = annotator.result()
-            if view_img:
-                cv2.imshow(str(p), im0)
-                cv2.waitKey(1)  # 1 millisecond
+             
+            cv2.imshow("Mangoes Sorting and Grading", im0)
+            cv2.waitKey(1)  # 1 millisecond
+            LOGGER.info(f'Total time: {sum(dt):.3f}s')
+            t = tuple(x / seen * 1E3 for x in dt)  # speeds per image
+            LOGGER.info(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {(1, 3, *imgsz)}' % t)
 
-            # Save results (image with detections)
-            if save_img:
-                pass
-
-        # Print time (inference-only)
-        LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
-
-    # Print results
-    t = tuple(x / seen * 1E3 for x in dt)  # speeds per image
-    LOGGER.info(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {(1, 3, *imgsz)}' % t)
-    
+            LOGGER.info(
+                        f"Predicted labels: {predicted_labels}"
+                    )
+        predicted_labels.clear()
     if update:
         strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
 
@@ -162,7 +167,7 @@ def parse_opt():
     parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'yolov5s.pt', help='model path(s)')
     parser.add_argument('--source', type=str, default=ROOT / 'data/images', help='file/dir/URL/glob, 0 for webcam')
     parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='(optional) dataset.yaml path')
-    parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
+    parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[416], help='inference size h,w')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')
     parser.add_argument('--max-det', type=int, default=1000, help='maximum detections per image')
