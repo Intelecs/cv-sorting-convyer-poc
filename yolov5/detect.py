@@ -18,7 +18,7 @@ from utils.general import (LOGGER, check_img_size, check_imshow, check_requireme
                          non_max_suppression, print_args, scale_coords, strip_optimizer)
 from utils.plots import Annotator, colors
 from utils.torch_utils import select_device, time_sync
-
+from device.ServoMotor import *
 
 @torch.no_grad()
 def run(
@@ -133,13 +133,15 @@ def run(
                     )
 
                     if names[int(cls)] == 'CLASS A':
-                        LOGGER.info(f"Opening Servo")
+                        LOGGER.info(f"Opening Servo for CLASS A")
+                        set_class_i()
                     
                     if names[int(cls)] == 'CLASS B':
-                        LOGGER.info(f"Closing Servo")
+                        LOGGER.info(f"Closing Servo for CLASS B")
+                        set_class_ii()
                     
                     if names[int(cls)] == 'CLASS C':
-                        LOGGER.info(f"Opening Door")
+                        LOGGER.info(f"Opening Door for CLASS C")
 
                     c = int(cls)  # integer class
                     label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
