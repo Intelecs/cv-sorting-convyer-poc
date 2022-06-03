@@ -47,7 +47,10 @@ try:
 except Exception as e:
     print(f"[ERROR] {e}")
 
-async def run_conveyer():
+def run_conveyer():
+    while 1:
+        print("moving")
+        sleep(1)
     try:
         while True:
             try:
