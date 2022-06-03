@@ -137,7 +137,7 @@ def run(
                         set_class_i()
                     
                     if names[int(cls)] == 'CLASS B':
-                        LOGGER.info(f"Closing Servo for CLASS B")
+                        LOGGER.info(f"Opening Servo for CLASS B")
                         set_class_ii()
                     
                     if names[int(cls)] == 'CLASS C':
