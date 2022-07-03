@@ -13,12 +13,12 @@ time.sleep(5)
 try:
 
   #block 
-  pin.ChangeDutyCycle(7.5)
-  time.sleep(0.5)
+  pin.ChangeDutyCycle(3.5)
+  time.sleep(15)
   
   #come back to internet
-  pin.ChangeDutyCycle(2.5)
-  time.sleep(0.5)
+  pin.ChangeDutyCycle(7.5)
+  time.sleep(5)
 
   
 except KeyboardInterrupt:
