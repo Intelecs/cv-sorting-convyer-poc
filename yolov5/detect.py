@@ -220,4 +220,5 @@ if __name__ == "__main__":
         opt = parse_opt()
         main(opt)
     except Exception as e:
-        GPIO.cleanup()
+        # GPIO.cleanup()
+        pass
