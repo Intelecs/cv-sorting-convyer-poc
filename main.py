@@ -26,7 +26,7 @@ if __name__ == '__main__':
     
     try:
         Thread(target=run_inference, daemon=True).start()
-        Thread(target=run_conveyer, daemon=True).start()
+        # Thread(target=run_conveyer, daemon=True).start()
 
     except KeyboardInterrupt:
         print("\nCtrl-C pressed. Stopping PIGPIo and exit")
