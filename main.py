@@ -16,7 +16,7 @@ def run_inference():
 
 
 if __name__ == '__main__':
-    Thread(target=run_conveyer, daemon=True).start()
+    # Thread(target=run_conveyer, daemon=True).start()
     Thread(target=run_inference, daemon=True).start()
     
 
