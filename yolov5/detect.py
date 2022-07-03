@@ -23,9 +23,9 @@ from device.ServoMotor import *
 try:
     import RPi.GPIO as GPIO
     servo_pin = 13
-    GPIO._pinmode(GPIO.BCM)
+    GPIO.pinmode(GPIO.BCM)
     GPIO.setup(servo_pin, GPIO.OUT)
-    
+
     handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
     handle.start(7.5) # Initialization
     time.sleep(3)
