@@ -4,6 +4,7 @@ try:
     from time import sleep
     import RPi.GPIO as GPIO
     GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
     from gpiozero import AngularServo
 
 except ImportError:
