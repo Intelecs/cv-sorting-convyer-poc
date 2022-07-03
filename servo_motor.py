@@ -17,8 +17,8 @@ try:
   time.sleep(0.5)
   
   #come back to internet
-  # pin.ChangeDutyCycle(7.5)
-  # time.sleep(5)
+  pin.ChangeDutyCycle(7.5)
+  time.sleep(0.5)
 
   
 except KeyboardInterrupt:
