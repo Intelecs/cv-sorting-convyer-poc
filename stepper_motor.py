@@ -37,16 +37,16 @@ SPR = 48   # Steps per Revolution (360 / 7.5)
 #connecting the pigpio daemon
 pi = pigpio.pi()
 
-#cycle and frequency
-pi.set_PWM_dutycycle(STEP, 128)
-pi.set_PWM_frequency(STEP, 500)
 
 def run_conveyer():
+    #cycle and frequency
+    pi.set_PWM_dutycycle(STEP, 128)
+    pi.set_PWM_frequency(STEP, 500)
     try:
         while True:
             pi.write(DIR, 1) # direction of the motor to clockwise
             sleep(.1)
-    
+
     except KeyboardInterrupt:
         print("\nCtrl-C pressed. Stopping PIGPIo and exit")
     finally:
