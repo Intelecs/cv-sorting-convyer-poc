@@ -41,14 +41,14 @@ pi = pigpio.pi()
 pi.set_PWM_dutycycle(STEP, 128)
 pi.set_PWM_frequency(STEP, 500)
 
-try:
-    while True:
-        pi.write(DIR, 1) # direction of the motor to clockwise
-        sleep(.1)
-
-except KeyboardInterrupt:
-    print("\nCtrl-C pressed. Stopping PIGPIo and exit")
-
-finally:
-    pi.set_PWM_dutycycle(STEP,0) # off Pulse width modulation
-    pi.stop()
+def run_conveyer():
+    try:
+        while True:
+            pi.write(DIR, 1) # direction of the motor to clockwise
+            sleep(.1)
+    
+    except KeyboardInterrupt:
+        print("\nCtrl-C pressed. Stopping PIGPIo and exit")
+    finally:
+        pi.set_PWM_dutycycle(STEP,0) # off Pulse width modulation
+        pi.stop()

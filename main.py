@@ -1,6 +1,9 @@
-from yolov5.device.stepperMotor import run_conveyer
+from stepper_motor import run_conveyer
 from threading import Thread
 import subprocess
+
+command = "sudo pigiod"
+process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding='utf-8', universal_newlines=True)
 
 def run_inference():
     

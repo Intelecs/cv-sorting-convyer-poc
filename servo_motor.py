@@ -15,6 +15,7 @@ try:
   #block 
   p.ChangeDutyCycle(3.5)
   time.sleep(15)
+  
   #come back to internet
   p.ChangeDutyCycle(7.5)
   time.sleep(5)
