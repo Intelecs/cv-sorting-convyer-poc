@@ -13,11 +13,11 @@ time.sleep(5)
 try:
 
   #block 
-  pin.ChangeDutyCycle(2)
+  pin.ChangeDutyCycle(7.5)
   time.sleep(0.5)
   
   #come back to internet
-  pin.ChangeDutyCycle(7.5)
+  pin.ChangeDutyCycle(2.5)
   time.sleep(0.5)
 
   
