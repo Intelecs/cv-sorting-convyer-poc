@@ -27,7 +27,7 @@ try:
 
     handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
     handle.start(7) # Initialization
-    time.sleep(3)
+    # time.sleep(3)
 except ImportError:
     pass 
 
@@ -134,8 +134,6 @@ def run(
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
 
-                    if conf < 90: 
-                        continue
                     
                     predicted_labels.append(
                         {
@@ -150,7 +148,7 @@ def run(
                         LOGGER.info(f"Opening Servo for CLASS A")
                         # set_class_i()
                         
-                        time.sleep(10)
+                        time.sleep(5)
                     
                     if names[int(cls)] == 'CLASS B':
                         LOGGER.info(f"Opening Servo for CLASS B")
