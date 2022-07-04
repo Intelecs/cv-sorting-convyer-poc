@@ -45,7 +45,7 @@ SPR = 48   # Steps per Revolution (360 / 7.5)
 
 try:
     pi.set_PWM_dutycycle(STEP, 128)
-    pi.set_PWM_frequency(STEP, 200)
+    pi.set_PWM_frequency(STEP, 100)
 except Exception as e:
     pass
 
@@ -64,7 +64,6 @@ def open_servo():
 def run_conveyer():
     while True:
         pi.write(DIR, CCW)
-        time.sleep(60)
 
 Thread(target=run_conveyer, daemon=True).start()
 
