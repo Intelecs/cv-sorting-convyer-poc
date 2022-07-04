@@ -228,8 +228,6 @@ def run(
                         except Exception as e:
                             LOGGER.error(f"Error opening servo: {e}")
                     
-                    if names[int(cls)] == 'CLASS C':
-                        LOGGER.info(f"Opening Door for CLASS C")
 
                     c = int(cls)  # integer class
                     label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
