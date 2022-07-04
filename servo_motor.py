@@ -15,7 +15,7 @@ pin.start(7)
 try:
 
   #block on CLASS A
-  pin.ChangeDutyCycle(4.5)
+  pin.ChangeDutyCycle(2.5)
   time.sleep(5)
   
   #come back to internet
