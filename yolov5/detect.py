@@ -5,6 +5,7 @@ from pathlib import Path
 import time
 import torch
 import torch.backends.cudnn as cudnn
+from threading import Thread
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
@@ -21,6 +22,11 @@ from utils.torch_utils import select_device, time_sync
 
 try:
     import RPi.GPIO as GPIO
+    import pigpio 
+    pi = pigpio.pi()
+
+
+
     servo_pin = 13
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(servo_pin, GPIO.OUT)
@@ -29,6 +35,19 @@ try:
     time.sleep(3)
 except ImportError:
     pass 
+
+DIR = 20   # Direction GPIO Pin
+STEP = 21  # Step GPIO Pin
+CW = 1     # Clockwise Rotation
+CCW = 0    # Counterclockwise Rotation
+SPR = 48   # Steps per Revolution (360 / 7.5)
+
+
+try:
+    pi.set_PWM_dutycycle(STEP, 128)
+    pi.set_PWM_frequency(STEP, 500)
+except Exception as e:
+    pass
 
 def open_servo():
 
@@ -41,6 +60,12 @@ def open_servo():
     time.sleep(0.5)
     handle.ChangeDutyCycle(0)
     # GPIO.cleanup()
+
+def run_conveyer():
+    while True:
+        pi.write(DIR, CCW)
+
+Thread(target=run_conveyer, daemon=True).start()
 
 @torch.no_grad()
 def run(
@@ -243,4 +268,7 @@ if __name__ == "__main__":
         handle.ChangeDutyCycle(0)
         handle.stop()
         GPIO.cleanup()
+
+        pi.set_PWM_dutycycle(STEP,0) # off Pulse width modulation
+        pi.stop()
         pass
