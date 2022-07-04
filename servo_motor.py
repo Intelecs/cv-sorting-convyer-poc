@@ -17,7 +17,10 @@ try:
   time.sleep(15)
   
   #come back to internet
-  pin.ChangeDutyCycle(7.5)
+  # pin.ChangeDutyCycle(7.5)
+
+
+  pin.ChangeDutyCycle(10.5)
   time.sleep(5)
 
   
