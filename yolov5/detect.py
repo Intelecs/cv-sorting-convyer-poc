@@ -25,7 +25,7 @@ try:
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(servo_pin, GPIO.OUT)
     handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
-    handle.start(7) # Initialization
+    handle.start(4) # Initialization
     # time.sleep(3)
 except ImportError:
     pass 
