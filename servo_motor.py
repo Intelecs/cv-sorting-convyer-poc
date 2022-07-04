@@ -14,12 +14,12 @@ pin.start(7)
 
 try:
 
-  #block 
-  # pin.ChangeDutyCycle(3.5)
-  # time.sleep(5)
+  #block on CLASS A
+  pin.ChangeDutyCycle(4.5)
+  time.sleep(5)
   
   #come back to internet
-  # pin.ChangeDutyCycle(3.5)
+  pin.ChangeDutyCycle(7)
 
 
   # pin.ChangeDutyCycle(10.5)
