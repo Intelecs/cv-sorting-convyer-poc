@@ -44,7 +44,7 @@ def run_conveyer():
     pi.set_PWM_frequency(STEP, 500)
     try:
         while True:
-            pi.write(DIR, 1) # direction of the motor to clockwise
+            pi.write(DIR, 0) # direction of the motor to clockwise
             sleep(.1)
 
     except KeyboardInterrupt:
