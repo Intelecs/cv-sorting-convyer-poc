@@ -8,7 +8,8 @@ GPIO.setup(servoPIN, GPIO.OUT)
 
 pin = GPIO.PWM(servoPIN, 50) # GPIO 17 for PWM with 50Hz
 # pin.start(2.5) # Initialization
-pin.start(0) # Initialization
+# pin.start(0) # Initialization
+pin.start(6.5)
 time.sleep(5)
 
 try:
