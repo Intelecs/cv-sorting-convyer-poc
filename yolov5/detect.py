@@ -45,7 +45,7 @@ SPR = 48   # Steps per Revolution (360 / 7.5)
 
 try:
     pi.set_PWM_dutycycle(STEP, 128)
-    pi.set_PWM_frequency(STEP, 1000)
+    pi.set_PWM_frequency(STEP, 200)
 except Exception as e:
     pass
 
