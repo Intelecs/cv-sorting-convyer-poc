@@ -25,19 +25,21 @@ try:
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(servo_pin, GPIO.OUT)
     handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
-    handle.start(4) # Initialization
-    # time.sleep(3)
+    handle.start(0) # Initialization
+    time.sleep(3)
 except ImportError:
     pass 
 
 def open_servo():
 
-    
-    time.sleep(5)
     handle.ChangeDutyCycle(4)
     time.sleep(5)
+    handle.ChangeDutyCycle(0)
+
+
     handle.ChangeDutyCycle(7)
     handle.stop()
+    handle.ChangeDutyCycle(0)
     # GPIO.cleanup()
 
 @torch.no_grad()
