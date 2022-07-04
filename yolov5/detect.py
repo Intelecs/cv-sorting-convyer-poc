@@ -22,7 +22,8 @@ from utils.torch_utils import select_device, time_sync
 try:
     import RPi.GPIO as GPIO
     servo_pin = 13
-
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(servo_pin, GPIO.OUT)
     handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
     handle.start(7) # Initialization
     # time.sleep(3)
@@ -31,8 +32,6 @@ except ImportError:
 
 def open_servo():
 
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(servo_pin, GPIO.OUT)
     
     time.sleep(5)
     handle.ChangeDutyCycle(4)
