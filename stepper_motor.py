@@ -52,3 +52,5 @@ def run_conveyer():
     finally:
         pi.set_PWM_dutycycle(STEP,0) # off Pulse width modulation
         pi.stop()
+
+run_conveyer()
