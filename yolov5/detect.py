@@ -133,6 +133,9 @@ def run(
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
+
+                    if conf < 90: 
+                        continue
                     
                     predicted_labels.append(
                         {
