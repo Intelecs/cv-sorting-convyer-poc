@@ -38,7 +38,7 @@ def open_servo():
 
 
     handle.ChangeDutyCycle(7)
-    handle.stop()
+    time.sleep(0.5)
     handle.ChangeDutyCycle(0)
     # GPIO.cleanup()
 
