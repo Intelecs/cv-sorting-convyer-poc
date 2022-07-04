@@ -26,6 +26,9 @@ try:
     pi = pigpio.pi()
 
 
+    triggerPin = 23
+    echoPin = 24
+
 
     servo_pin = 13
     GPIO.setmode(GPIO.BCM)
@@ -33,6 +36,9 @@ try:
     handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
     handle.start(0) # Initialization
     time.sleep(3)
+
+    GPIO.setup(triggerPin,GPIO.OUT)
+    GPIO.setup(echoPin,GPIO.IN)
 except ImportError:
     pass 
 
@@ -65,7 +71,34 @@ def run_conveyer():
     while True:
         pi.write(DIR, CCW)
 
+def ultasonic():
+    while True:
+        GPIO.output(triggerPin, False)
+        time.sleep(1)
+    
+        GPIO.output(triggerPin, True)
+        time.sleep(0.00001)
+        GPIO.output(triggerPin, False)
+    
+    
+        while GPIO.input(echoPin)==0:
+             pulseStart = time.time()
+    
+        while GPIO.input(echoPin)==1:
+             pulseEnd = time.time()
+    
+        pulseDuration = pulseEnd - pulseStart
+    
+        distance = pulseDuration * 17150
+    
+    
+        distance = round(distance, 2)
+    
+        print("Distance: %s cm")
+        print(distance)
+
 Thread(target=run_conveyer, daemon=True).start()
+Thread(target=ultasonic, daemon=True).start()
 
 @torch.no_grad()
 def run(
