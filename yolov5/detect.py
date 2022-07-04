@@ -64,7 +64,7 @@ def open_servo():
 def run_conveyer():
     while True:
         pi.write(DIR, CCW)
-        time.sleep(0.2)
+        time.sleep(1)
 
 Thread(target=run_conveyer, daemon=True).start()
 
