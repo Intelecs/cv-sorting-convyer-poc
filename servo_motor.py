@@ -14,13 +14,13 @@ try:
 
   #block 
   pin.ChangeDutyCycle(3.5)
-  time.sleep(15)
+  time.sleep(5)
   
   #come back to internet
-  # pin.ChangeDutyCycle(7.5)
+  pin.ChangeDutyCycle(7.5)
 
 
-  pin.ChangeDutyCycle(10.5)
+  # pin.ChangeDutyCycle(10.5)
   time.sleep(5)
 
   
