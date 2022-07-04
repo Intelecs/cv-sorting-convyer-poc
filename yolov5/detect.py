@@ -52,6 +52,7 @@ except Exception as e:
 def open_servo():
 
     handle.ChangeDutyCycle(4)
+    handle.ChangeDutyCycle(0)
     time.sleep(20)
     handle.ChangeDutyCycle(0)
 
