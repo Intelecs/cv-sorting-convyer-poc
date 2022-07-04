@@ -237,7 +237,10 @@ if __name__ == "__main__":
     try:
         opt = parse_opt()
         main(opt)
-    except Exception as e:
+    except KeyboardInterrupt as e:
+        handle.ChangeDutyCycle(7)
+        time.sleep(0.5)
+        handle.ChangeDutyCycle(0)
         handle.stop()
         GPIO.cleanup()
         pass
