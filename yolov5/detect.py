@@ -153,9 +153,9 @@ def run(
                     if names[int(cls)] == 'CLASS B':
                         LOGGER.info(f"Opening Servo for CLASS B")
                         # set_class_ii()
-                        # handle.ChangeDutyCycle(4)
-                        # time.sleep(10)
-                        # handle.ChangeDutyCycle(7)
+                        handle.ChangeDutyCycle(4)
+                        time.sleep(5)
+                        handle.ChangeDutyCycle(7)
                     
                     if names[int(cls)] == 'CLASS C':
                         LOGGER.info(f"Opening Door for CLASS C")
