@@ -15,8 +15,8 @@ time.sleep(5)
 try:
 
   # #block on CLASS A
-  # pin.ChangeDutyCycle(4)
-  # time.sleep(20)
+  pin.ChangeDutyCycle(4)
+  time.sleep(5)
   
   # #come back to internet
   # pin.ChangeDutyCycle(7)
