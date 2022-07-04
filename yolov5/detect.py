@@ -26,7 +26,7 @@ try:
     GPIO.setup(servo_pin, GPIO.OUT)
 
     handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
-    handle.start(7.5) # Initialization
+    handle.start(7) # Initialization
     time.sleep(3)
 except ImportError:
     pass 
@@ -146,13 +146,14 @@ def run(
                     if names[int(cls)] == 'CLASS A':
                         LOGGER.info(f"Opening Servo for CLASS A")
                         # set_class_i()
-                        handle.ChangeDutyCycle(3.5)
+                        handle.ChangeDutyCycle(4)
                         time.sleep(10)
                     
                     if names[int(cls)] == 'CLASS B':
                         LOGGER.info(f"Opening Servo for CLASS B")
                         # set_class_ii()
-                        handle.ChangeDutyCycle(7.5)
+                        handle.ChangeDutyCycle(7)
+                        time.sleep(10)
                     
                     if names[int(cls)] == 'CLASS C':
                         LOGGER.info(f"Opening Door for CLASS C")
