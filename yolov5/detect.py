@@ -22,14 +22,27 @@ from utils.torch_utils import select_device, time_sync
 try:
     import RPi.GPIO as GPIO
     servo_pin = 13
+
+    
+    
+    # time.sleep(3)
+except ImportError:
+    pass 
+
+def open_servo():
+
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(servo_pin, GPIO.OUT)
 
     handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
-    # handle.start(7) # Initialization
-    # time.sleep(3)
-except ImportError:
-    pass 
+
+
+    handle.start(7) # Initialization
+    handle.ChangeDutyCycle(4)
+    time.sleep(5)
+    handle.ChangeDutyCycle(7)
+    handle.stop()
+    GPIO.cleanup()
 
 @torch.no_grad()
 def run(
@@ -152,10 +165,12 @@ def run(
                     
                     if names[int(cls)] == 'CLASS B':
                         LOGGER.info(f"Opening Servo for CLASS B")
-                        # set_class_ii()
-                        handle.ChangeDutyCycle(4)
-                        time.sleep(5)
-                        handle.ChangeDutyCycle(7)
+                        # set_class_ii() with
+
+                        try:
+                            open_servo()
+                        except Exception as e:
+                            LOGGER.error(f"Error opening servo: {e}")
                     
                     if names[int(cls)] == 'CLASS C':
                         LOGGER.info(f"Opening Door for CLASS C")
