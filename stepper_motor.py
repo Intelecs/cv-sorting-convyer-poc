@@ -41,7 +41,7 @@ pi = pigpio.pi()
 def run_conveyer():
     #cycle and frequency
     pi.set_PWM_dutycycle(STEP, 128)
-    pi.set_PWM_frequency(STEP, 500)
+    pi.set_PWM_frequency(STEP, 1000)
     try:
         while True:
             pi.write(DIR, 0) # direction of the motor to clockwise
