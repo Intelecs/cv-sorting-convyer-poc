@@ -45,14 +45,14 @@ SPR = 48   # Steps per Revolution (360 / 7.5)
 
 try:
     pi.set_PWM_dutycycle(STEP, 128)
-    pi.set_PWM_frequency(STEP, 100)
+    pi.set_PWM_frequency(STEP, 160)
 except Exception as e:
     pass
 
 def open_servo():
 
     handle.ChangeDutyCycle(4)
-    time.sleep(5)
+    time.sleep(10)
     handle.ChangeDutyCycle(0)
 
 
