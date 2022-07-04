@@ -23,8 +23,8 @@ try:
     import RPi.GPIO as GPIO
     servo_pin = 13
 
-    
-    
+    handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
+    handle.start(7) # Initialization
     # time.sleep(3)
 except ImportError:
     pass 
@@ -33,16 +33,13 @@ def open_servo():
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(servo_pin, GPIO.OUT)
-
-    handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
-
-
-    handle.start(7) # Initialization
+    
+    time.sleep(5)
     handle.ChangeDutyCycle(4)
     time.sleep(5)
     handle.ChangeDutyCycle(7)
     handle.stop()
-    GPIO.cleanup()
+    # GPIO.cleanup()
 
 @torch.no_grad()
 def run(
