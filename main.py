@@ -4,7 +4,7 @@ import subprocess
 
 
 def run_inference():
-    command = "python yolov5/detect.py --weights models/best.pt --source 0 --conf-thres 0.85 --imgsz 256"
+    command = "python yolov5/detect.py --weights models/best.pt --source 0 --conf-thres 0.25 --imgsz 320"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding='utf-8', universal_newlines=True)
     while True:
         realtime_output = process.stdout.readline()
