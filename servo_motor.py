@@ -20,7 +20,9 @@ try:
   pin.ChangeDutyCycle(0)
   
   # #come back to internet
-  # pin.ChangeDutyCycle(7)
+  pin.ChangeDutyCycle(7)
+  time.sleep(0.5)
+  pin.ChangeDutyCycle(0)
 
 
   # pin.ChangeDutyCycle(10.5)
