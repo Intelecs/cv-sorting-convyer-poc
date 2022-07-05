@@ -33,16 +33,16 @@ try:
     servo_pin = 13
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(servo_pin, GPIO.OUT)
-    handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
-    handle.start(0) # Initialization
+    # handle = GPIO.PWM(servo_pin, 50) # GPIO 17 for PWM with 50Hz
+    # handle.start(0) # Initialization
     time.sleep(3)
 
     GPIO.setup(triggerPin,GPIO.OUT)
     GPIO.setup(echoPin,GPIO.IN)
 
-    handle.ChangeDutyCycle(7)
-    time.sleep(5)
-    handle.ChangeDutyCycle(4)
+    # handle.ChangeDutyCycle(7)
+    # time.sleep(5)
+    # handle.ChangeDutyCycle(4)
 except ImportError:
     pass 
 
