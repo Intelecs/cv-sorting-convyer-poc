@@ -39,6 +39,10 @@ try:
 
     GPIO.setup(triggerPin,GPIO.OUT)
     GPIO.setup(echoPin,GPIO.IN)
+
+    handle.ChangeDutyCycle(7)
+    time.sleep(5)
+    handle.ChangeDutyCycle(4)
 except ImportError:
     pass 
 
@@ -97,8 +101,8 @@ def ultasonic():
         print("Distance: %s cm")
         print(distance)
 
-Thread(target=run_conveyer, daemon=True).start()
-Thread(target=ultasonic, daemon=True).start()
+# Thread(target=run_conveyer, daemon=True).start()
+# Thread(target=ultasonic, daemon=True).start()
 
 @torch.no_grad()
 def run(
@@ -219,12 +223,21 @@ def run(
                         
                         time.sleep(5)
                     
-                    if names[int(cls)] == 'CLASS B':
+                    if names[int(cls)] == 'Class II':
                         LOGGER.info(f"Opening Servo for CLASS B")
                         # set_class_ii() with
 
                         try:
-                            open_servo()
+                            duty = 4
+                            handle.ChangeDutyCycle(7)
+                            time.sleep(5)
+                            handle.ChangeDutyCycle(4)
+                            while duty <= 7:
+                                handle.ChangeDutyCycle(duty)
+                                time.sleep(0.01)
+                                duty = duty + 0.033
+
+
                         except Exception as e:
                             LOGGER.error(f"Error opening servo: {e}")
                     
