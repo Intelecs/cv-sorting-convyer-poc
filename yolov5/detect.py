@@ -227,19 +227,19 @@ def run(
                         LOGGER.info(f"Opening Servo for CLASS B")
                         # set_class_ii() with
 
-                        try:
-                            duty = 4
-                            handle.ChangeDutyCycle(7)
-                            time.sleep(5)
-                            handle.ChangeDutyCycle(4)
-                            while duty <= 7:
-                                handle.ChangeDutyCycle(duty)
-                                time.sleep(0.01)
-                                duty = duty + 0.033
+                        # try:
+                        #     duty = 4
+                        #     handle.ChangeDutyCycle(7)
+                        #     time.sleep(5)
+                        #     handle.ChangeDutyCycle(4)
+                        #     while duty <= 7:
+                        #         handle.ChangeDutyCycle(duty)
+                        #         time.sleep(0.01)
+                        #         duty = duty + 0.033
 
 
-                        except Exception as e:
-                            LOGGER.error(f"Error opening servo: {e}")
+                        # except Exception as e:
+                        #     LOGGER.error(f"Error opening servo: {e}")
                     
 
                     c = int(cls)  # integer class
