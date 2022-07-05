@@ -217,7 +217,7 @@ def run(
                         }
                     )
 
-                    if names[int(cls)] == 'CLASS A':
+                    if names[int(cls)] == 'CLASS I':
                         LOGGER.info(f"Opening Servo for CLASS A")
                         # set_class_i()
                         
