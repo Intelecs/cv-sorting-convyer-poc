@@ -101,7 +101,7 @@ def ultasonic():
         print("Distance: %s cm")
         print(distance)
 
-# Thread(target=run_conveyer, daemon=True).start()
+Thread(target=run_conveyer, daemon=True).start()
 # Thread(target=ultasonic, daemon=True).start()
 
 @torch.no_grad()
